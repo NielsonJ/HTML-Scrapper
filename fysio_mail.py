@@ -73,6 +73,7 @@ def main():
             unqiue += 1
             emaillist.add(email)
             file_writter.writerow({'Bedrijfsnaam':company, 'Plaats':location, 'Email':email, 'Website':website, 'Telefoonnummer':phonenumber})
+            
         print("complete: " + city + "\t : " + str(unqiue) + " total\t" + str(duplicates) + " dups")
 
     file.close() # clean up CSV file
