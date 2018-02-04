@@ -48,29 +48,34 @@ def main():
 
     for city in CITIES:
         # fetch data from Rest API
-        jsondata = urllib.request.urlopen("https://www.defysiotherapeut.com/restservices/portfolio?city=" + city) # write recieved data to file (provided as json from API)
-        data = json.loads(jsondata.read()) # load data from JSON file into memory (as dictionary)
-        jsondata.close() # close JSON file
+        jsondata = urllib.request.urlopen("https://www.defysiotherapeut.com/restservices/portfolio?city=" + city)
+        data = json.loads(jsondata.read())
+        # clean up
+        jsondata.close()
         urllib.request.urlcleanup()
 
         # process and write data
-        for entry in data: # cycle through entries in data and write key-value's to temp variable
-            company = entry['naam']
-            email = entry['email'].lower() # lowercase all emails, API DB does contain duplicate emails because it's case sensitive and they program like shit.
-            website = entry['website']
-            location = entry['plaats']
-            phonenumber = entry['telefoon']
-            # check if email is not empty, proceed
-            if email != '':
-                if email in emaillist: # check for already recorded email
-                    duplicates += 1
-                else: # add to set, write to file
-                    unqiue += 1
-                    emaillist.add(email)
-                    file_writter.writerow({'Bedrijfsnaam':company, 'Plaats':location, 'Email':email, 'Website':website, 'Telefoonnummer':phonenumber})
+        for datapoint in data:
+            company = datapoint['naam']
+            email = datapoint['email'].lower() # lowercase all emails, API DB does contain duplicate emails because it's case sensitive and they program like shit.
+            website = datapoint['website']
+            location = datapoint['plaats']
+            phonenumber = datapoint['telefoon']
+
+            # preform checks
+            if email == '':
+                continue
+            if email in emaillist:
+                duplicates += 1
+                continue
+            
+            # write unique email to file
+            unqiue += 1
+            emaillist.add(email)
+            file_writter.writerow({'Bedrijfsnaam':company, 'Plaats':location, 'Email':email, 'Website':website, 'Telefoonnummer':phonenumber})
         print("complete: " + city + "\t : " + str(unqiue) + " total\t" + str(duplicates) + " dups")
 
-    file.close() # close CSV file
+    file.close() # clean up CSV file
     print("------------------")
     print("scraping complete:")
     print("Total: " + str(unqiue))
