@@ -20,7 +20,7 @@ Known search parameters:
 
 note: 
 * The REST API returns the first 100 entries regardless of actual query result.
-* parameters should be in Dutch language/names
+* parameters should be in Dutch language/names.
 """
 import csv
 import json
@@ -43,8 +43,8 @@ def main():
     file_writter.writeheader()
 
     emaillist = set()   # set with unique emails
-    duplicate = 0
-    added = 0
+    duplicates = 0
+    unqiue = 0
 
     for city in CITIES:
         # fetch data from Rest API
@@ -63,17 +63,17 @@ def main():
             # check if email is not empty, proceed
             if email != '':
                 if email in emaillist: # check for already recorded email
-                    duplicate += 1
+                    duplicates += 1
                 else: # add to set, write to file
-                    added += 1
+                    unqiue += 1
                     emaillist.add(email)
                     file_writter.writerow({'Bedrijfsnaam':company, 'Plaats':location, 'Email':email, 'Website':website, 'Telefoonnummer':phonenumber})
-        print("complete: " + city + "\t : " + str(added) + " total\t" + str(duplicate) + " dups")
+        print("complete: " + city + "\t : " + str(unqiue) + " total\t" + str(duplicates) + " dups")
 
     file.close() # close CSV file
     print("------------------")
     print("scraping complete:")
-    print("Total: " + str(added))
+    print("Total: " + str(unqiue))
 
 if __name__ == "__main__":
     main()

@@ -19,4 +19,4 @@ Known search parameters:
 
 note: 
 * The REST API returns the first 100 entries regardless of actual query result.
-* parameters should be in Dutch language/names
+* parameters should be in Dutch language/names.
