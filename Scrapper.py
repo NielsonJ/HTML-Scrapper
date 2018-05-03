@@ -8,9 +8,10 @@ TXT_FILE_NAME = 'FysioMails.txt'
 URL = "https://www.defysiotherapeut.com/restservices/portfolio"
 
 
-def Main():
+def main():
 
     print("\nStart Data scraping from: \n" + URL + "\n")
+
     csvFile = open(CSV_FILE_NAME, 'w', encoding="utf-8")
     fields = ('Bedrijfsnaam', 'Plaats', 'Email', 'Website', 'Telefoonnummer')
     file_writter = csv.DictWriter(
@@ -22,10 +23,10 @@ def Main():
     duplicates = set()  # Keep track of duplicates
     unique = 0
 
-    for x in range(20, 201):
+    for x in range(20, 200):
         postalcode = str(x * 50) + 'AA'
         querystring = "?postalcode=" + postalcode + "&maxdistance=50"
-        data = scrapeAPI(URL, querystring)
+        data = getData(URL, querystring)
         unique = processData(txtFile, file_writter, data, duplicates, unique)
         time = datetime.datetime.now().strftime("%H:%M:%S")
         print(f"[ {time} ] [ Postalcode: {postalcode} ] [ added: {unique:4} ]")
@@ -39,7 +40,7 @@ def Main():
     print()
 
 
-def scrapeAPI(url, querystring):
+def getData(url, querystring):
     jsondata = urllib.request.urlopen(url + querystring)
     data = json.loads(jsondata.read())
     jsondata.close()
@@ -73,4 +74,4 @@ def processData(txtFile, csvWritter, data, duplicates, unique):
 
 
 if __name__ == "__main__":
-    Main()
+    main()
